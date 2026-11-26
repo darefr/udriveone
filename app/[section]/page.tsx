@@ -3,8 +3,19 @@ import { notFound } from 'next/navigation'
 import { AboutPage, RentalGuide, ReviewsPage } from '@/components/company-pages'
 import { RentalOptionPage, RentalComparison } from '@/components/rental-options'
 import { FAQPage } from '@/components/faq-browser'
+import { LegalPage } from '@/components/legal-page'
 
 const pages: Record<string, { title: string; description: string }> = {
+  privacy: {
+    title: 'Privacy Policy',
+    description:
+      'How U Drive handles rental plans, account previews, and enquiries on this website.',
+  },
+  terms: {
+    title: 'Terms of Use',
+    description:
+      'Information about U Drive rental estimates, availability, and website use.',
+  },
   about: {
     title: 'About U Drive',
     description:
@@ -58,6 +69,9 @@ export default async function InformationPage({
 }) {
   const { section } = await params
   switch (section) {
+    case 'privacy':
+    case 'terms':
+      return <LegalPage page={section} />
     case 'about':
       return <AboutPage />
     case 'how-it-works':

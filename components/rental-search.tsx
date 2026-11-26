@@ -58,9 +58,15 @@ export function RentalSearch({ initial = blankTrip }: { initial?: Trip }) {
       aria-label="Find a car"
       data-ready={ready}
     >
+      <div className="search-panel-heading">
+        <span>
+          <CarFront size={17} /> Rental search
+        </span>
+        <small>Daily rates in NPR</small>
+      </div>
       <div className="search-grid">
         <div className="search-field">
-          <label htmlFor={`${id}-pickup`}>Pickup location</label>
+          <label htmlFor={`${id}-pickup`}>Pickup Location</label>
           <div className="search-control">
             <MapPin />
             <select
@@ -94,8 +100,27 @@ export function RentalSearch({ initial = blankTrip }: { initial?: Trip }) {
             <ChevronDown className="control-chevron" />
           </div>
         </div>
+        {(['start', 'end'] as const).map((key) => (
+          <div className="search-field" key={key}>
+            <label htmlFor={`${id}-${key}`}>
+              {key === 'start' ? 'Pickup Date' : 'Return Date'}
+            </label>
+            <DatePicker
+              compact
+              id={`${id}-${key}`}
+              label={key === 'start' ? 'Pickup Date' : 'Return Date'}
+              value={trip[key]}
+              min={
+                key === 'start'
+                  ? todayInNepal()
+                  : nextDay(trip.start || todayInNepal())
+              }
+              onChange={(value) => update(key, value)}
+            />
+          </div>
+        ))}
         <div className="search-field">
-          <label htmlFor={`${id}-mode`}>Rental type</label>
+          <label htmlFor={`${id}-mode`}>Rental Type</label>
           <div className="search-control">
             <KeyRound />
             <select
@@ -112,25 +137,6 @@ export function RentalSearch({ initial = blankTrip }: { initial?: Trip }) {
             <ChevronDown className="control-chevron" />
           </div>
         </div>
-        {(['start', 'end'] as const).map((key) => (
-          <div className="search-field" key={key}>
-            <label htmlFor={`${id}-${key}`}>
-              {key === 'start' ? 'Pickup date' : 'Return date'}
-            </label>
-            <DatePicker
-              compact
-              id={`${id}-${key}`}
-              label={key === 'start' ? 'Pickup date' : 'Return date'}
-              value={trip[key]}
-              min={
-                key === 'start'
-                  ? todayInNepal()
-                  : nextDay(trip.start || todayInNepal())
-              }
-              onChange={(value) => update(key, value)}
-            />
-          </div>
-        ))}
         <button className="action primary search-submit" type="submit">
           <Search size={17} />
           Find a Car

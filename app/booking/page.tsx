@@ -4,7 +4,7 @@ import { PageIntro } from '@/components/shared'
 import { destinations } from '@/lib/rental-data'
 import { readTrip, type Query } from '@/lib/trip'
 export const metadata: Metadata = {
-  title: 'Plan Your Booking',
+  title: 'Rent a Car',
   description:
     'Choose your vehicle, rental mode, pickup location, and dates. Calculate your daily rental estimate and prepare your U Drive booking request.',
 }
@@ -24,7 +24,7 @@ export default async function BookingPage({
         current="Booking"
         eyebrow="PLAN YOUR RENTAL"
         title="Your next journey starts here."
-        description="Choose your car and dates, check the estimate, then review your booking request. No account needed."
+        description="Choose your car and dates, check the estimate, then review your rental request. No account needed."
       />
       <BookingForm
         key={JSON.stringify([initial, destination])}

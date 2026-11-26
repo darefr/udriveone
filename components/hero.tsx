@@ -8,53 +8,36 @@ import {
 } from 'lucide-react'
 import { Wheel } from './brand'
 import { RentalSearch } from './rental-search'
+import { VehicleShowcase } from './vehicle-showcase'
 
 export function Hero() {
   return (
     <>
-      <section className="hero" aria-labelledby="hero-title">
-        <picture className="hero-photo">
-          <source
-            media="(max-width: 640px)"
-            srcSet="/images/himalayan-drive-mobile.webp"
-          />
-          <img
-            src="/images/himalayan-drive.webp"
-            alt="A silver Deepal crossover on a winding road beneath Himalayan peaks"
-            fetchPriority="high"
-            width="1250"
-            height="500"
-          />
-        </picture>
-        <div className="hero-shade" />
-        <div className="wrap hero-inner">
-          <div className="hero-copy">
-            <p className="eyebrow">CAR RENTAL IN KATHMANDU</p>
-            <h1 id="hero-title">
-              Your journey.
+      <VehicleShowcase>
+        <div className="hero-copy">
+          <p className="eyebrow">CAR RENTAL IN KATHMANDU</p>
+          <h1 id="hero-title">
+            Your journey.
+            <br />
+            Your car. <em>Your Nepal.</em>
+          </h1>
+          <p className="hero-description">
+            Self-drive and chauffeur-driven car rentals.
+            <span className="hero-coverage-copy">
               <br />
-              Your car. <em>Your Nepal.</em>
-            </h1>
-            <p className="hero-description">
-              Premium car rentals from Kathmandu to all of Nepal.
-              <br className="desktop-break" /> Take the wheel, or let us do the
-              driving.
-            </p>
-            <div className="action-row">
-              <Link href="/booking" className="action primary">
-                Book a Car <ArrowRight size={17} />
-              </Link>
-              <Link href="/fleet" className="action light-outline">
-                Explore Fleet
-              </Link>
-            </div>
+              From Kathmandu, across Nepal.
+            </span>
+          </p>
+          <div className="action-row">
+            <Link href="/booking" className="action primary">
+              Rent a Car <ArrowRight size={17} />
+            </Link>
+            <Link href="/fleet" className="action light-outline">
+              Explore Fleet <ArrowUpRight size={16} />
+            </Link>
           </div>
-          <Link href="/fleet/deepal-s05" className="hero-vehicle">
-            <span />
-            Deepal S05 <ArrowUpRight size={14} />
-          </Link>
         </div>
-      </section>
+      </VehicleShowcase>
       <div className="wrap hero-search">
         <RentalSearch />
       </div>

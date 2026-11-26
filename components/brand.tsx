@@ -1,24 +1,5 @@
 import Link from 'next/link'
 
-export function RoadMark() {
-  return (
-    <svg
-      className="road-mark"
-      viewBox="0 0 48 44"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        fill="currentColor"
-        d="M8 3h10l-5.9 22.7c-.8 3.1.8 5.2 4.2 5.2h4.4l-2.6 9H13C3.7 39.9-.4 34.4 2 25.5L8 3Z"
-      />
-      <path
-        fill="currentColor"
-        d="M25 3h8.9l-7.4 27.8h-9.1L25 3Zm14.3 0H48l-7.7 28.2c-1.5 5.5-5.3 8.7-11.5 8.7h-7.9l2.4-8.9h3.8c2.6 0 4.1-1.3 4.8-3.9L39.3 3Z"
-      />
-    </svg>
-  )
-}
 export function Brand({ onNavigate }: { onNavigate?: () => void } = {}) {
   return (
     <Link
@@ -27,11 +8,13 @@ export function Brand({ onNavigate }: { onNavigate?: () => void } = {}) {
       onClick={onNavigate}
       aria-label="U Drive Car Rental Kathmandu — home"
     >
-      <RoadMark />
-      <span className="brand-words">
-        <span className="wordmark">U DRIVE</span>
-        <span className="brand-descriptor">RENTAL CAR KATHMANDU</span>
-      </span>
+      <img
+        className="brand-logo"
+        src="/images/u-drive-logo.webp"
+        alt="U Drive Car Rental"
+        width={1000}
+        height={320}
+      />
     </Link>
   )
 }

@@ -56,7 +56,7 @@ export function VehicleDetail({
                 href={tripHref('/booking', { ...trip, vehicle: vehicle.slug })}
                 className="action primary"
               >
-                Book this car <ArrowRight size={17} />
+                Rent This Car <ArrowRight size={17} />
               </Link>
               <Link
                 className="text-link"

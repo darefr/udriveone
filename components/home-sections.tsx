@@ -37,16 +37,18 @@ export function ExploreNepal() {
     <section className="section surface">
       <div className="wrap">
         <SectionHeading
-          eyebrow="THE NEPAL ROADBOOK"
-          title="Where will the road take you?"
-          description="From valley streets to lakeside escapes. Discover Nepal by car."
+          eyebrow="DRIVE NEPAL"
+          title="Drive beyond Kathmandu."
+          description="Choose your car in the valley. Follow the road to lakeside bends, forest drives, and Himalayan ridges."
           href="/destinations"
-          linkText="All destinations"
+          linkText="Explore driving routes"
         />
         <div className="destination-grid">
-          {destinations.slice(0, 3).map((d) => (
-            <DestinationCard destination={d} key={d.slug} />
-          ))}
+          {destinations
+            .filter((d) => d.slug !== 'kathmandu')
+            .map((d) => (
+              <DestinationCard destination={d} key={d.slug} />
+            ))}
         </div>
       </div>
     </section>
@@ -54,7 +56,7 @@ export function ExploreNepal() {
 }
 export function RentalExperiences() {
   return (
-    <section className="section">
+    <section className="section rental-experiences">
       <div className="wrap">
         <SectionHeading
           eyebrow="RENTAL OPTIONS"
@@ -66,12 +68,12 @@ export function RentalExperiences() {
             {
               slug: 'self-drive',
               title: 'Self Drive',
-              copy: 'Your playlist. Your stops. Your way.',
+              copy: 'Your route. Your pace.',
             },
             {
               slug: 'with-driver',
               title: 'With Driver',
-              copy: 'Take in the views. Leave the driving to us.',
+              copy: 'Sit back and enjoy the journey.',
             },
           ].map((s) => (
             <Link
@@ -135,8 +137,8 @@ export function StorySection({ full = false }: { full?: boolean }) {
       <div className="wrap story-layout">
         <figure className="story-photo">
           <Image
-            src="/images/nagarkot.webp"
-            alt="Terraced hills and the Himalayan skyline in Nepal"
+            src="/images/drive-nagarkot.webp"
+            alt="A Tata Nexon following the pine-lined ridge road near Nagarkot"
             width={508}
             height={508}
             sizes="(max-width:800px) 90vw, 44vw"

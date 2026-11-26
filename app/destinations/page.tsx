@@ -13,8 +13,8 @@ export default function DestinationsPage() {
     <>
       <section className="photo-banner">
         <Image
-          src="/images/pokhara.webp"
-          alt="Colorful boats on Phewa Lake, Pokhara"
+          src="/images/showcase-byd-atto-3.webp"
+          alt="A BYD Atto 3 on an open road through the Nepal foothills"
           fill
           priority
           sizes="100vw"
@@ -22,12 +22,12 @@ export default function DestinationsPage() {
         <div className="banner-scrim" />
         <div className="wrap">
           <Breadcrumbs items={[{ label: 'Destinations' }]} />
-          <p className="eyebrow">DESTINATION COLLECTION</p>
-          <h1>The Nepal roadbook.</h1>
+          <p className="eyebrow">THE U DRIVE ROADBOOK</p>
+          <h1>Your car. Your route. Your Nepal.</h1>
           <p>
-            City courtyards, quiet lakes, and mountain horizons.
+            From Kathmandu streets to open ridge roads.
             <br />
-            Find a destination worth the drive.
+            Choose a route for your next rental.
           </p>
         </div>
       </section>

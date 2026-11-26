@@ -1,19 +1,24 @@
 import Link from 'next/link'
-import { ArrowRight, ArrowUpRight, MapPin } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, MapPin, Route } from 'lucide-react'
 import { Brand } from './brand'
-import { business, fleet } from '@/lib/rental-data'
+import {
+  business,
+  destinations,
+  fleet,
+  whatsAppContact,
+} from '@/lib/rental-data'
 
 export function CTA() {
   return (
     <section className="booking-cta">
       <div className="wrap cta-inner">
         <div>
-          <p className="eyebrow">YOUR NEXT JOURNEY</p>
-          <h2>Ready to explore Nepal?</h2>
+          <p className="eyebrow">YOUR NEXT DRIVE</p>
+          <h2>Ready to take the wheel?</h2>
         </div>
         <div className="action-row">
           <Link href="/booking" className="action primary">
-            Book Your Car <ArrowRight size={17} />
+            Rent a Car <ArrowRight size={17} />
           </Link>
           <Link href="/contact" className="action light-outline">
             Contact U Drive <ArrowUpRight size={17} />
@@ -25,40 +30,47 @@ export function CTA() {
 }
 export { FloatingContact } from './floating-contact'
 
+const groups = [
+  { title: 'Fleet', links: fleet.map((v) => [v.name, `/fleet/${v.slug}`]) },
+  {
+    title: 'Rental Services',
+    links: [
+      ['Self Drive', '/self-drive'],
+      ['With Driver', '/with-driver'],
+      ['Rent a Car', '/fleet'],
+      ['Booking', '/booking'],
+    ],
+  },
+  {
+    title: 'Explore',
+    links: ['kathmandu', 'pokhara', 'chitwan', 'nagarkot'].flatMap((slug) =>
+      destinations
+        .filter((d) => d.slug === slug)
+        .map((d) => [d.name, `/destinations/${d.slug}`]),
+    ),
+  },
+  {
+    title: 'Company',
+    links: [
+      ['About U Drive', '/about'],
+      ['How It Works', '/how-it-works'],
+      ['Reviews', '/reviews'],
+      ['FAQ', '/faq'],
+      ['Contact', '/contact'],
+    ],
+  },
+  {
+    title: 'Customer Support',
+    links: [
+      ['Sign In', '/sign-in'],
+      ['Create Account', '/create-account'],
+      ['Contact the team', '/contact'],
+      ['WhatsApp', whatsAppContact.href],
+    ],
+  },
+]
+
 export function Footer() {
-  const groups = [
-    {
-      title: 'Our fleet',
-      links: fleet.map((v) => [v.name, `/fleet/${v.slug}`]),
-    },
-    {
-      title: 'Explore',
-      links: [
-        ['Self Drive', '/self-drive'],
-        ['With Driver', '/with-driver'],
-        ['Destinations', '/destinations'],
-        ['How It Works', '/how-it-works'],
-      ],
-    },
-    {
-      title: 'U Drive',
-      links: [
-        ['About Us', '/about'],
-        ['Reviews', '/reviews'],
-        ['FAQs', '/faq'],
-        ['Contact', '/contact'],
-      ],
-    },
-    {
-      title: 'Your journey',
-      links: [
-        ['Book a Car', '/booking'],
-        ['View Fleet', '/fleet'],
-        ['Sign In', '/sign-in'],
-        ['Create Account', '/create-account'],
-      ],
-    },
-  ]
   return (
     <footer className="site-footer">
       <div className="wrap">
@@ -78,19 +90,49 @@ export function Footer() {
               aria-label={`${g.title} footer links`}
             >
               <h3>{g.title}</h3>
-              {g.links.map(([name, url]) => (
-                <Link key={url} href={url}>
-                  {name}
-                </Link>
-              ))}
+              {g.links.map(([name, url]) =>
+                url.startsWith('https:') ? (
+                  <a
+                    key={name}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={whatsAppContact.label}
+                    className="inline-icon"
+                  >
+                    {name}
+                    <ArrowUpRight size={12} />
+                  </a>
+                ) : (
+                  <Link key={name} href={url}>
+                    {name}
+                  </Link>
+                ),
+              )}
             </nav>
           ))}
+        </div>
+        <div className="footer-coverage">
+          <span>
+            <Route size={17} />
+            <strong>Our service area</strong>
+          </span>
+          <p>
+            Kathmandu Valley and across Nepal. Pickup and delivery by
+            arrangement.
+          </p>
+          <Link href="/destinations">
+            Drive Nepal <ArrowUpRight size={14} />
+          </Link>
         </div>
         <div className="footer-bottom">
           <span>
             © {new Date().getFullYear()} U Drive Car Rental Kathmandu.
           </span>
-          <span>Based in Kathmandu. Built for Nepal.</span>
+          <nav aria-label="Legal information">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Use</Link>
+          </nav>
         </div>
       </div>
     </footer>

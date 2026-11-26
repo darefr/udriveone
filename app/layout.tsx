@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import localFont from 'next/font/local'
 import { Navbar } from '@/components/navbar'
 import { Footer, FloatingContact } from '@/components/footer'
-import { business } from '@/lib/rental-data'
+import { business, fleet, money } from '@/lib/rental-data'
 import './globals.css'
 
 const manrope = localFont({
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
       'U Drive Car Rental Kathmandu | Your Journey. Your Car. Your Nepal.',
     template: '%s | U Drive Kathmandu',
   },
-  description: business.description,
+  description: `Compare ${fleet.length} rental cars from ${money(Math.min(...fleet.map((car) => car.dailyRate)))} per day. Choose self drive or a driver and explore Nepal from Kathmandu with U Drive.`,
   icons: { icon: '/icon.svg' },
   openGraph: {
     siteName: business.name,

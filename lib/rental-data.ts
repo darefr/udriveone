@@ -1,11 +1,21 @@
 export const business = {
   name: 'U Drive Car Rental Kathmandu',
   shortName: 'U Drive',
+  whatsappNumber: '' as string,
   base: 'Kathmandu, Nepal',
   coverage: 'Kathmandu and across Nepal',
   description:
     'Self-drive and chauffeur-driven car rentals from Kathmandu, for journeys across Nepal.',
 } as const
+
+const whatsappRecipient = business.whatsappNumber.replace(/\D/g, '')
+export const whatsAppContact = {
+  href: `https://wa.me/${whatsappRecipient}?text=${encodeURIComponent('Hello U Drive, I would like to enquire about renting a car from Kathmandu.')}`,
+  direct: Boolean(whatsappRecipient),
+  label: whatsappRecipient
+    ? 'Chat with U Drive on WhatsApp'
+    : 'Share a rental enquiry on WhatsApp — choose your U Drive contact',
+}
 
 export type Vehicle = {
   slug: string
@@ -101,7 +111,7 @@ export const destinations: Destination[] = [
     stops: ['Phewa Lakeside', 'Old Bazaar', 'Sarangkot viewpoint'],
     advice:
       'Allow flexibility for weather and road conditions on the journey from Kathmandu. Confirm your route and stops before departure.',
-    image: '/images/pokhara.webp',
+    image: '/images/drive-pokhara.webp',
   },
   {
     slug: 'kathmandu',
@@ -109,11 +119,11 @@ export const destinations: Destination[] = [
     category: 'City & culture',
     tagline: 'Courtyards, culture & city drives',
     description:
-      'Explore the city where every U Drive journey begins. Link old courtyards, temple squares, and neighbourhood cafés into a day that is entirely your own.',
+      'Start with a city drive through the valley. Choose a compact car for your Kathmandu itinerary, or let a driver handle the streets while you plan the stops.',
     stops: ['Kathmandu Durbar Square', 'Boudhanath', 'Swayambhunath'],
     advice:
       'Many heritage squares are best explored on foot. Plan a nearby drop-off or parking point with the team.',
-    image: '/images/kathmandu.webp',
+    image: '/images/drive-kathmandu.webp',
   },
   {
     slug: 'nagarkot',
@@ -125,7 +135,7 @@ export const destinations: Destination[] = [
     stops: ['Nagarkot ridge', 'View tower area', 'Village walking trails'],
     advice:
       'Mountain views depend on the weather. Discuss the hill road and the best handover time for your itinerary.',
-    image: '/images/nagarkot.webp',
+    image: '/images/drive-nagarkot.webp',
   },
   {
     slug: 'chitwan',
@@ -137,7 +147,7 @@ export const destinations: Destination[] = [
     stops: ['Sauraha', 'Rapti riverbank', 'Tharu village walks'],
     advice:
       'Your rental covers the road journey. Park entry, guides, and wildlife activities are separate arrangements.',
-    image: '/images/chitwan.webp',
+    image: '/images/drive-chitwan.webp',
   },
 ]
 
@@ -155,7 +165,7 @@ export const journeySteps = [
     text: 'Choose your pickup and return dates to see a base estimate.',
   },
   {
-    title: 'Request a booking',
+    title: 'Request your rental',
     text: 'Add your contact information, pickup point, and trip notes.',
   },
   {
@@ -223,7 +233,7 @@ export const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/fleet', label: 'Fleet' },
   { href: '/rental-options', label: 'Rental Options' },
-  { href: '/destinations', label: 'Destinations' },
+  { href: '/destinations', label: 'Drive Nepal' },
   { href: '/how-it-works', label: 'How It Works' },
   { href: '/about', label: 'About' },
   { href: '/reviews', label: 'Reviews' },

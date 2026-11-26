@@ -178,8 +178,8 @@ export function ContactForm({ vehicle }: { vehicle?: string }) {
         </div>
         <aside className="contact-aside">
           <Image
-            src="/images/kathmandu.webp"
-            alt="Historic temple rooftops in Kathmandu"
+            src="/images/drive-kathmandu.webp"
+            alt="A silver crossover on a Kathmandu street"
             width={508}
             height={508}
           />

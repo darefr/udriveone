@@ -59,7 +59,7 @@ export function VehicleCard({
             className="small-book"
             href={tripHref('/booking', { ...trip, vehicle: vehicle.slug })}
           >
-            Book Now
+            Rent This Car
             <ArrowUpRight size={13} />
           </Link>
         </div>

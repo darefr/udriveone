@@ -304,7 +304,18 @@
   min-height: 100%;
   isolation: isolate;
 }
-.auth-photo > img,
+.auth-photo picture,
+.auth-photo picture img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: 52% center;
+}
+.auth-photo picture {
+  z-index: -2;
+}
 .auth-photo-shade {
   position: absolute;
   inset: 0;
@@ -355,7 +366,94 @@
   padding: 10px 12px;
 }
 .auth-fields {
-  gap: 15px;
+  gap: 13px;
+}
+.auth-subtitle a,
+.account-options > a,
+.terms-check a {
+  color: var(--primary-dark);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.auth-subtitle a:hover,
+.account-options > a:hover,
+.terms-check a:hover {
+  text-decoration: underline;
+}
+.social-sign-in {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-block: 21px 17px;
+}
+.social-sign-in .action {
+  min-height: 40px;
+  padding: 9px 14px;
+  gap: 10px;
+  font-size: 13px;
+}
+.social-sign-in img {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+.auth-divider {
+  margin-block: 0 16px;
+}
+.auth-divider [data-slot='field-separator-content'] {
+  font-size: 10px;
+  line-height: 20px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+}
+.account-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 13px;
+  font-size: 12px;
+}
+.account-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.account-check input {
+  accent-color: var(--primary-dark);
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.terms-check {
+  margin-top: 15px;
+  font-size: 12px;
+}
+.account-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 13px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.account-preview svg {
+  margin-top: 2px;
+}
+.auth-reset-copy {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin-block: 18px;
+}
+.auth-panel fieldset {
+  min-width: 0;
+}
+.auth-photo-copy {
+  text-shadow: 0 1px 6px var(--foreground);
 }
 .auth-panel .password-input {
   position: relative;
@@ -630,8 +728,11 @@
     height: 145px;
     min-height: 0;
   }
-  .auth-photo > img {
-    object-position: center 54%;
+  .auth-photo picture img {
+    object-position: center 61%;
+  }
+  .auth-photo-copy {
+    text-shadow: none;
   }
   .auth-photo-shade {
     background: linear-gradient(90deg, #101b24b3, transparent 80%);

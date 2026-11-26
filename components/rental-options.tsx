@@ -23,8 +23,8 @@ export function RentalOptionPage({ mode }: { mode: RentalMode }) {
             <h1>{self ? 'The road, on your terms.' : 'The view is yours.'}</h1>
             <p className="option-lead">
               {self
-                ? 'Take the keys. Choose your next turn.'
-                : 'Your itinerary. A driver at the wheel.'}
+                ? 'Your route. Your pace.'
+                : 'Sit back and enjoy the journey.'}
             </p>
             <p>
               {self
@@ -41,7 +41,7 @@ export function RentalOptionPage({ mode }: { mode: RentalMode }) {
                 : [
                     'Choose your preferred vehicle',
                     'Discuss your route and stops in advance',
-                    'Confirm driver charges before you book',
+                    'Confirm driver charges before you rent',
                   ]
               ).map((x) => (
                 <span key={x}>

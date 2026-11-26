@@ -376,7 +376,7 @@ export function BookingForm({
               </p>
             )}
             <button disabled={!ready} type="submit" className="action primary">
-              Review booking request <ArrowRight size={16} />
+              Review rental request <ArrowRight size={16} />
             </button>
           </form>
         )}

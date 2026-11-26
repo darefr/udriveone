@@ -76,18 +76,19 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             </Link>
           </div>
         </nav>
-        <div className="drawer-account">
-          <Link onClick={onClose} href="/sign-in">
-            <UserRound size={17} />
+        <div className="drawer-account" aria-label="Your U Drive account">
+          <Link onClick={onClose} href="/sign-in" className="action primary">
+            <UserRound size={16} />
             Sign In
           </Link>
-          <Link onClick={onClose} href="/create-account">
+          <Link
+            onClick={onClose}
+            href="/create-account"
+            className="action outline"
+          >
             Create Account <ArrowRight size={15} />
           </Link>
         </div>
-        <Link href="/booking" onClick={onClose} className="action primary">
-          Book Now <ArrowRight size={17} />
-        </Link>
       </div>
     </dialog>
   )
@@ -216,7 +217,7 @@ export function Navbar() {
               Sign In
             </Link>
             <Link className="action primary nav-book" href="/booking">
-              Book Now
+              Rent Now
               <ArrowUpRight size={16} />
             </Link>
             <button
