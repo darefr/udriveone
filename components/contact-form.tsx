@@ -1,0 +1,209 @@
+'use client'
+
+import { useEffect, useRef, useState, type FormEvent } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Download,
+  MapPin,
+  MountainSnow,
+} from 'lucide-react'
+import { FieldGroup } from './ui/field'
+import { FormField, PreviewNote } from './form-parts'
+import { Input } from './ui/input'
+import { Textarea } from './ui/textarea'
+import { downloadText } from '@/lib/trip'
+
+type Enquiry = { name: string; email: string; topic: string; message: string }
+export function ContactForm({ vehicle }: { vehicle?: string }) {
+  const [values, setValues] = useState<Enquiry>({
+    name: '',
+    email: '',
+    topic: vehicle ? 'Vehicle details' : 'Rental enquiry',
+    message: vehicle ? `I have a question about the ${vehicle}.` : '',
+  })
+  const [prepared, setPrepared] = useState(false)
+  const [ready, setReady] = useState(false)
+  const [error, setError] = useState('')
+  const heading = useRef<HTMLHeadingElement>(null)
+  useEffect(() => setReady(true), [])
+  useEffect(() => {
+    if (prepared) heading.current?.focus()
+  }, [prepared])
+  const update = (key: keyof Enquiry, value: string) => {
+    setValues((v) => ({ ...v, [key]: value }))
+    setError('')
+  }
+  const prepare = (e: FormEvent) => {
+    e.preventDefault()
+    if (values.name.trim().length < 2 || values.message.trim().length < 10) {
+      setError('Add your name and a message of at least 10 characters.')
+      return
+    }
+    setPrepared(true)
+  }
+  const draft = `U DRIVE CAR RENTAL KATHMANDU\nENQUIRY DRAFT — NOT SENT\n\nName: ${values.name}\nEmail: ${values.email}\nSubject: ${values.topic}\n\n${values.message}`
+  return (
+    <section className="section">
+      <div className="wrap contact-layout">
+        <div>
+          {prepared ? (
+            <div className="enquiry-review">
+              <p className="eyebrow">ENQUIRY PREVIEW</p>
+              <h2 ref={heading} tabIndex={-1}>
+                Your enquiry is ready.
+              </h2>
+              <p className="section-description">
+                Download this draft to keep a copy. It has not been sent to U
+                Drive.
+              </p>
+              <dl className="review-details">
+                {[
+                  ['Name', values.name],
+                  ['Email', values.email],
+                  ['Subject', values.topic],
+                  ['Message', values.message],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="action-row">
+                <button
+                  className="action primary"
+                  onClick={() => downloadText('u-drive-enquiry.txt', draft)}
+                >
+                  <Download size={16} />
+                  Download enquiry
+                </button>
+                <button
+                  className="action outline"
+                  onClick={() => setPrepared(false)}
+                >
+                  <ArrowLeft size={15} />
+                  Edit enquiry
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form
+              method="post"
+              onSubmit={prepare}
+              className="enquiry-form"
+              data-ready={ready}
+            >
+              <p className="eyebrow">TRAVEL ENQUIRIES</p>
+              <h2>Tell us about your plans.</h2>
+              <FieldGroup className="form-grid">
+                <FormField id="contact-name" label="Full name">
+                  <Input
+                    id="contact-name"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    autoComplete="name"
+                    value={values.name}
+                    onChange={(e) => update('name', e.target.value)}
+                    placeholder="Your full name"
+                  />
+                </FormField>
+                <FormField id="contact-email" label="Email address">
+                  <Input
+                    id="contact-email"
+                    type="email"
+                    required
+                    maxLength={254}
+                    autoComplete="email"
+                    value={values.email}
+                    onChange={(e) => update('email', e.target.value)}
+                    placeholder="you@example.com"
+                  />
+                </FormField>
+                <FormField
+                  id="contact-topic"
+                  label="What is your enquiry about?"
+                  wide
+                >
+                  <select
+                    className="form-select"
+                    id="contact-topic"
+                    value={values.topic}
+                    onChange={(e) => update('topic', e.target.value)}
+                  >
+                    {[
+                      'Rental enquiry',
+                      'Vehicle details',
+                      'Pickup & delivery',
+                      'Account enquiry',
+                      'Other question',
+                    ].map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
+                </FormField>
+                <FormField id="contact-message" label="Your message" wide>
+                  <Textarea
+                    id="contact-message"
+                    required
+                    minLength={10}
+                    maxLength={2000}
+                    value={values.message}
+                    onChange={(e) => update('message', e.target.value)}
+                    placeholder="Share your travel dates, destination, or question"
+                  />
+                </FormField>
+              </FieldGroup>
+              <PreviewNote>
+                This preview prepares a downloadable enquiry. It does not send a
+                message to the rental team.
+              </PreviewNote>
+              {error && (
+                <p role="alert" className="form-error">
+                  {error}
+                </p>
+              )}
+              <button
+                className="action primary"
+                type="submit"
+                disabled={!ready}
+              >
+                Prepare enquiry <ArrowRight size={16} />
+              </button>
+            </form>
+          )}
+        </div>
+        <aside className="contact-aside">
+          <Image
+            src="/images/kathmandu.webp"
+            alt="Historic temple rooftops in Kathmandu"
+            width={508}
+            height={508}
+          />
+          <div>
+            <p className="eyebrow">OUR HOME BASE</p>
+            <h3>Kathmandu, Nepal.</h3>
+            <p>
+              Local journeys and Nepal-wide travel, with pickup or delivery
+              arranged for your route.
+            </p>
+            <span>
+              <MapPin size={16} />
+              Kathmandu pickup
+            </span>
+            <span>
+              <MountainSnow size={16} />
+              Nepal-wide service
+            </span>
+            <Link href="/faq" className="text-link">
+              Browse rental FAQs <ArrowRight size={15} />
+            </Link>
+          </div>
+        </aside>
+      </div>
+    </section>
+  )
+}
