@@ -8,12 +8,11 @@ import {
   ClipboardList,
   KeyRound,
   MapPin,
-  Route,
   UserRoundCheck,
 } from 'lucide-react'
 import { journeySteps } from '@/lib/rental-data'
-import { PageIntro, SectionHeading } from './shared'
-import { StorySection } from './home-sections'
+import { PageIntro } from './shared'
+import { RentalPrinciples, StorySection } from './home-sections'
 import { ReviewCarousel } from './review-carousel'
 import { CTA } from './footer'
 
@@ -27,39 +26,7 @@ export function AboutPage() {
         description="U Drive Car Rental Kathmandu connects a modern vehicle collection with the freedom to explore Nepal your way."
       />
       <StorySection full />
-      <section className="section surface">
-        <div className="wrap">
-          <SectionHeading
-            eyebrow="WHY U DRIVE"
-            title="Built around your journey."
-          />
-          <div className="principles">
-            {[
-              {
-                Icon: KeyRound,
-                title: 'A choice of rental modes',
-                text: 'Take the keys yourself, or choose a vehicle with a driver. The choice starts with how you want to travel.',
-              },
-              {
-                Icon: CarFront,
-                title: 'A focused fleet',
-                text: 'Four vehicles, each with its own listed daily rate. Compare your options without guessing the starting price.',
-              },
-              {
-                Icon: Route,
-                title: 'Beyond Kathmandu',
-                text: 'Plan pickup or delivery in Kathmandu and across Nepal. Confirm the route and location for your own itinerary.',
-              },
-            ].map(({ Icon, title, text }) => (
-              <div key={title}>
-                <Icon />
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <RentalPrinciples />
       <CTA />
     </>
   )
@@ -119,8 +86,8 @@ export function RentalGuide() {
                 <ArrowRight size={16} />
               </Link>
               <p className="fine-print">
-                This demo prepares a downloadable request. It does not submit or
-                confirm a booking.
+                Send your reviewed request on WhatsApp. The Kathmandu team
+                confirms the car, final price, and handover with you.
               </p>
             </div>
           </aside>
@@ -146,9 +113,8 @@ export function ReviewsPage() {
           <div>
             <h2>A note on our reviews.</h2>
             <p>
-              No verified customer reviews have been supplied for this demo. All
-              profiles, ratings, and quotations shown above are illustrative—not
-              published customer endorsements.
+              The traveller profiles, ratings, and stories shown here are
+              illustrative examples, not verified customer endorsements.
             </p>
             <Link href="/contact" className="text-link">
               Ask about a rental <ArrowRight size={15} />

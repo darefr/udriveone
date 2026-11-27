@@ -23,14 +23,18 @@ export default async function FleetPage({
         current="Fleet"
         eyebrow="U DRIVE COLLECTION"
         title="The U Drive fleet."
-        description="Four distinctive vehicles, transparent daily rates, and the freedom to choose how you travel."
+        description="Compare cars by body style, budget, and daily rate. Choose a vehicle that fits the way you want to see Nepal."
       />
       <div className="catalogue-search">
         <div className="wrap">
           <RentalSearch key={JSON.stringify(trip)} initial={trip} />
         </div>
       </div>
-      <FleetResults trip={trip} searched={Object.keys(query).length > 0} />
+      <FleetResults
+        key={JSON.stringify(trip)}
+        trip={trip}
+        searched={Object.keys(trip).some((key) => Boolean(query[key]))}
+      />
       <CTA />
     </>
   )

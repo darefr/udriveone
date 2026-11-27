@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { CalendarDays, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { modeLabel, money, type Vehicle } from '@/lib/rental-data'
 import { daysBetween, displayDate, type Trip } from '@/lib/trip'
 
@@ -7,10 +7,12 @@ export function BookingSummary({
   vehicle,
   trip,
   delivery,
+  returnPoint,
 }: {
   vehicle: Vehicle
   trip: Trip
   delivery: string
+  returnPoint?: string
 }) {
   const days = daysBetween(trip.start, trip.end)
   return (
@@ -38,6 +40,18 @@ export function BookingSummary({
             <dd>{modeLabel(trip.mode)}</dd>
           </div>
           <div>
+            <dt>Pickup date</dt>
+            <dd>{displayDate(trip.start)}</dd>
+          </div>
+          <div>
+            <dt>Return date</dt>
+            <dd>{displayDate(trip.end)}</dd>
+          </div>
+          <div>
+            <dt>Return location</dt>
+            <dd>{returnPoint || 'Same as pickup'}</dd>
+          </div>
+          <div>
             <dt>Daily rate</dt>
             <dd>{money(vehicle.dailyRate)}</dd>
           </div>
@@ -58,12 +72,6 @@ export function BookingSummary({
             </div>
           )}
         </dl>
-        {trip.start && trip.end && (
-          <p className="summary-dates">
-            <CalendarDays size={14} />
-            {displayDate(trip.start)} – {displayDate(trip.end)}
-          </p>
-        )}
         <div className="estimated-total" aria-live="polite">
           <span>Estimated base total</span>
           <strong>

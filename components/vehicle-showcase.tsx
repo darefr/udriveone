@@ -9,7 +9,7 @@ import {
   Pause,
   Play,
 } from 'lucide-react'
-import { fleet, money } from '@/lib/rental-data'
+import { featuredVehicles as fleet, money } from '@/lib/rental-data'
 
 const interval = 2800
 const counter = (n: number) => String(n).padStart(2, '0')
@@ -57,20 +57,27 @@ export function VehicleShowcase({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    if (
-      paused ||
-      hovered ||
-      !inView ||
-      !visible ||
-      loaded.length !== fleet.length
-    )
-      return
+    if (paused || hovered || !inView || !visible || loaded.length < 2) return
     const timer = window.setTimeout(
-      () => setIndex((i) => (i + 1) % fleet.length),
+      () =>
+        setIndex((i) => {
+          for (let offset = 1; offset < fleet.length; offset++) {
+            const next = (i + offset) % fleet.length
+            if (loaded.includes(next)) return next
+          }
+          return i
+        }),
       interval,
     )
     return () => window.clearTimeout(timer)
-  }, [index, paused, hovered, inView, visible, loaded.length])
+  }, [index, paused, hovered, inView, visible, loaded])
+
+  if (!vehicle)
+    return (
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="wrap hero-inner">{children}</div>
+      </section>
+    )
 
   const step = (direction: number) => {
     const next = (index + direction + fleet.length) % fleet.length
@@ -99,15 +106,12 @@ export function VehicleShowcase({ children }: { children: ReactNode }) {
             className="hero-photo"
             data-active={index === i}
           >
-            <source
-              media="(max-width: 900px)"
-              srcSet={`/images/showcase-${car.slug}-mobile.webp`}
-            />
+            <source media="(max-width: 900px)" srcSet={car.showcase.mobile} />
             <img
               ref={(el) => {
                 photos.current[i] = el
               }}
-              src={`/images/showcase-${car.slug}.webp`}
+              src={car.showcase.desktop}
               alt=""
               width="1226"
               height="498"
@@ -187,7 +191,11 @@ export function VehicleShowcase({ children }: { children: ReactNode }) {
             aria-live={paused ? 'polite' : 'off'}
             aria-atomic="true"
           >
-            <span className="showcase-kicker">Featured vehicle</span>
+            <span className="showcase-kicker">
+              Featured vehicle <span aria-hidden="true">/</span>{' '}
+              {vehicle.fuel === 'Electric' ? 'Electric ' : ''}
+              {vehicle.bodyType}
+            </span>
             <span className="showcase-car-line">
               <strong>{vehicle.name}</strong>
               <span className="showcase-price">

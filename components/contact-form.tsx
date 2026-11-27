@@ -15,6 +15,7 @@ import { FormField, PreviewNote } from './form-parts'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { downloadText } from '@/lib/trip'
+import { business, whatsappHref, whatsAppContact } from '@/lib/rental-data'
 
 type Enquiry = { name: string; email: string; topic: string; message: string }
 export function ContactForm({ vehicle }: { vehicle?: string }) {
@@ -56,8 +57,8 @@ export function ContactForm({ vehicle }: { vehicle?: string }) {
                 Your enquiry is ready.
               </h2>
               <p className="section-description">
-                Download this draft to keep a copy. It has not been sent to U
-                Drive.
+                Open WhatsApp to send these details to the Kathmandu rental
+                desk. You can edit the message before sending it.
               </p>
               <dl className="review-details">
                 {[
@@ -73,8 +74,18 @@ export function ContactForm({ vehicle }: { vehicle?: string }) {
                 ))}
               </dl>
               <div className="action-row">
-                <button
+                <a
                   className="action primary"
+                  href={whatsappHref(
+                    `Hello U Drive, ${values.topic.toLowerCase()}:\n\n${values.message.trim()}\n\n${values.name.trim()}\n${values.email.trim()}`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open WhatsApp <ArrowRight size={16} />
+                </a>
+                <button
+                  className="action outline"
                   onClick={() => downloadText('u-drive-enquiry.txt', draft)}
                 >
                   <Download size={16} />
@@ -158,8 +169,8 @@ export function ContactForm({ vehicle }: { vehicle?: string }) {
                 </FormField>
               </FieldGroup>
               <PreviewNote>
-                This preview prepares a downloadable enquiry. It does not send a
-                message to the rental team.
+                Review your message first, then choose Open WhatsApp to share it
+                with U Drive. Nothing is sent automatically.
               </PreviewNote>
               {error && (
                 <p role="alert" className="form-error">
@@ -198,6 +209,15 @@ export function ContactForm({ vehicle }: { vehicle?: string }) {
               <MountainSnow size={16} />
               Nepal-wide service
             </span>
+            <a
+              className="footer-whatsapp"
+              href={whatsAppContact.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/whatsapp.svg" alt="" width={16} height={16} />
+              {business.whatsappNumber}
+            </a>
             <Link href="/faq" className="text-link">
               Browse rental FAQs <ArrowRight size={15} />
             </Link>

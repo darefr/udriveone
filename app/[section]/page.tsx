@@ -19,7 +19,7 @@ const pages: Record<string, { title: string; description: string }> = {
   about: {
     title: 'About U Drive',
     description:
-      'Meet U Drive Car Rental Kathmandu: four distinct vehicles, two rental modes, and service across Nepal.',
+      'Meet U Drive Car Rental Kathmandu: a modern fleet, two rental modes, and service across Nepal.',
   },
   'how-it-works': {
     title: 'How Car Rental Works',
@@ -34,7 +34,7 @@ const pages: Record<string, { title: string; description: string }> = {
   'self-drive': {
     title: 'Self Drive Car Rental',
     description:
-      'Explore Nepal at your own pace. Compare four self-drive rental vehicles and prepare your trip from Kathmandu.',
+      'Explore Nepal at your own pace. Compare self-drive rental vehicles and prepare your trip from Kathmandu.',
   },
   'with-driver': {
     title: 'Car Rental With Driver',

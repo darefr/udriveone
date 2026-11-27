@@ -10,7 +10,7 @@ const notices = {
     ],
     [
       'Forms and downloads',
-      'The rental and contact forms prepare drafts in your browser. They do not send your contact details to U Drive. A downloaded copy is saved on your own device; share it only with a recipient you trust.',
+      'The rental and contact forms prepare drafts in your browser. Choosing Open WhatsApp passes the reviewed details to WhatsApp in a pre-filled message addressed to U Drive. You decide whether to send it. A downloaded copy stays on your device.',
     ],
     [
       'Account previews',
@@ -18,7 +18,11 @@ const notices = {
     ],
     [
       'External services',
-      'WhatsApp opens outside this website and is subject to its own privacy policy. If a business number has not been linked, you choose the recipient before sending. Opening a link does not send a message for you.',
+      'WhatsApp opens outside this website and is subject to its own privacy policy. Rental enquiries are addressed to +977 980-0899505. Opening the conversation does not send the message for you.',
+    ],
+    [
+      'Rental assistant',
+      'The catalog guide sends your recent conversation to our website to prepare a reply from published rental information. It does not check live inventory or reserve cars. History is kept only for this tab session and can be cleared. Do not enter payment or identity documents. Optional voice dictation uses your browser’s speech service, which may process audio outside this website; the transcript is not submitted until you press Send.',
     ],
     [
       'Website delivery',

@@ -34,6 +34,7 @@ export function DatePicker({
   min,
   onChange,
   compact = false,
+  invalid = false,
 }: {
   id: string
   label: string
@@ -41,6 +42,7 @@ export function DatePicker({
   min: string
   onChange: (value: string) => void
   compact?: boolean
+  invalid?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState(value)
@@ -71,6 +73,8 @@ export function DatePicker({
         type="button"
         aria-label={`${label}: ${displayDate(value)}`}
         data-value={value}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? `${id}-error` : undefined}
         className={
           compact
             ? 'search-control travel-date-trigger'

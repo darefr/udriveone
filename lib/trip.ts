@@ -32,8 +32,11 @@ export function daysBetween(start: string, end: string) {
     ),
   )
 }
-export const nextDay = (value: string) =>
-  new Date(Date.parse(`${value}T00:00:00Z`) + DAY).toISOString().slice(0, 10)
+export const addRentalDays = (value: string, days: number) =>
+  new Date(Date.parse(`${value}T00:00:00Z`) + DAY * days)
+    .toISOString()
+    .slice(0, 10)
+export const nextDay = (value: string) => addRentalDays(value, 1)
 export const displayDate = (value: string) =>
   validDate(value)
     ? new Intl.DateTimeFormat('en-GB', {
@@ -64,7 +67,10 @@ export function readTrip(query: Query): Trip {
         : '',
   }
 }
-export function tripHref(path: string, trip: Partial<Trip>) {
+export function tripHref(
+  path: string,
+  trip: Partial<Trip> & { duration?: string },
+) {
   const params = new URLSearchParams()
   Object.entries(trip).forEach(([key, value]) => {
     if (value) params.set(key, value)

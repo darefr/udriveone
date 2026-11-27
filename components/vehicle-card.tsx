@@ -27,6 +27,10 @@ export function VehicleCard({
           height={508}
           sizes="(max-width: 640px) 80vw, (max-width: 950px) 44vw, 24vw"
         />
+        <span className="vehicle-category">
+          {vehicle.fuel === 'Electric' ? 'Electric ' : ''}
+          {vehicle.bodyType}
+        </span>
         <span className="image-open">
           <ArrowUpRight size={16} />
         </span>
@@ -35,16 +39,27 @@ export function VehicleCard({
         <h3>
           <Link href={details}>{vehicle.name}</Link>
         </h3>
+        <p className="vehicle-spec-line">
+          {vehicle.seats} seats <span>·</span>{' '}
+          {vehicle.transmission === 'Confirm variant'
+            ? 'Gearbox on request'
+            : vehicle.transmission}{' '}
+          <span>·</span> {vehicle.tier}
+        </p>
         <div className="vehicle-modes">
-          <span>
-            <Wheel size={14} />
-            Self Drive
-          </span>
-          <i />
-          <span>
-            <UserRound size={14} />
-            With Driver
-          </span>
+          {vehicle.modes.includes('self-drive') && (
+            <span>
+              <Wheel size={14} />
+              Self Drive
+            </span>
+          )}
+          {vehicle.modes.length > 1 && <i />}
+          {vehicle.modes.includes('with-driver') && (
+            <span>
+              <UserRound size={14} />
+              With Driver
+            </span>
+          )}
         </div>
         <p className="car-price">
           <strong>{money(vehicle.dailyRate)}</strong>
@@ -57,9 +72,15 @@ export function VehicleCard({
           </Link>
           <Link
             className="small-book"
-            href={tripHref('/booking', { ...trip, vehicle: vehicle.slug })}
+            href={
+              vehicle.availability === 'Unavailable'
+                ? `/contact?vehicle=${vehicle.slug}`
+                : tripHref('/booking', { ...trip, vehicle: vehicle.slug })
+            }
           >
-            Rent This Car
+            {vehicle.availability === 'Unavailable'
+              ? 'Ask the team'
+              : 'Rent This Car'}
             <ArrowUpRight size={13} />
           </Link>
         </div>

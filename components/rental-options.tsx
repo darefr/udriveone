@@ -34,7 +34,7 @@ export function RentalOptionPage({ mode }: { mode: RentalMode }) {
             <div className="check-list">
               {(self
                 ? [
-                    'Choose from all four fleet vehicles',
+                    'Choose from our self-drive collection',
                     'Plan your own stops and schedule',
                     'Request pickup or delivery across Nepal',
                   ]
@@ -119,7 +119,11 @@ export function RentalComparison() {
             <tbody>
               {[
                 ['At the wheel', 'You', 'A chauffeur'],
-                ['Vehicle selection', 'All four vehicles', 'All four vehicles'],
+                [
+                  'Vehicle selection',
+                  'Self-drive collection',
+                  'Chauffeur collection',
+                ],
                 ['Pickup or delivery', 'By arrangement', 'By arrangement'],
                 [
                   'Before you travel',

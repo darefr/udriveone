@@ -15,7 +15,14 @@ import {
   X,
 } from 'lucide-react'
 import { Brand } from './brand'
-import { navLinks } from '@/lib/rental-data'
+import {
+  business,
+  destinations,
+  featuredVehicles,
+  money,
+  navLinks,
+  whatsAppContact,
+} from '@/lib/rental-data'
 import { cn } from '@/lib/utils'
 
 function MobileMenu({ onClose }: { onClose: () => void }) {
@@ -76,6 +83,84 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
             </Link>
           </div>
         </nav>
+        <section className="drawer-booking" aria-label="Quick booking">
+          <p className="eyebrow">QUICK BOOKING</p>
+          <h3>Already have a trip in mind?</h3>
+          <p>Choose your car and dates for an instant rental estimate.</p>
+          <Link href="/booking" onClick={onClose} className="action primary">
+            Rent Now <ArrowRight size={15} />
+          </Link>
+        </section>
+        <section className="drawer-section" aria-labelledby="drawer-cars">
+          <h3 id="drawer-cars">Popular vehicles</h3>
+          <nav className="drawer-car-list" aria-label="Popular rental vehicles">
+            {featuredVehicles.slice(0, 4).map((car) => (
+              <Link
+                key={car.slug}
+                href={`/fleet/${car.slug}`}
+                onClick={onClose}
+              >
+                <img
+                  src={car.image}
+                  alt=""
+                  width={58}
+                  height={38}
+                  loading="lazy"
+                />
+                <span>
+                  <strong>{car.name}</strong>
+                  <small>{money(car.dailyRate)} / day</small>
+                </span>
+                <ArrowUpRight size={15} />
+              </Link>
+            ))}
+          </nav>
+        </section>
+        <section className="drawer-section" aria-labelledby="drawer-routes">
+          <h3 id="drawer-routes">Explore Nepal</h3>
+          <nav className="drawer-route-list" aria-label="Popular destinations">
+            {destinations.map((d) => (
+              <Link
+                key={d.slug}
+                href={`/destinations/${d.slug}`}
+                onClick={onClose}
+              >
+                <MapPin size={14} />
+                {d.name}
+              </Link>
+            ))}
+          </nav>
+        </section>
+        <section
+          className="drawer-section drawer-help"
+          aria-labelledby="drawer-support"
+        >
+          <h3 id="drawer-support">Your Kathmandu rental desk</h3>
+          <p>
+            Local pickup, Nepal-wide delivery, and a real person to help plan
+            the handover.
+          </p>
+          <a
+            className="drawer-contact"
+            href={whatsAppContact.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/images/whatsapp.svg" alt="" width={19} height={19} />
+            <span>
+              WhatsApp U Drive<small>{business.whatsappNumber}</small>
+            </span>
+            <ArrowUpRight size={15} />
+          </a>
+          <div className="mobile-rental-links">
+            <Link href="/faq" onClick={onClose}>
+              Rental FAQs
+            </Link>
+            <Link href="/contact" onClick={onClose}>
+              Contact team
+            </Link>
+          </div>
+        </section>
         <div className="drawer-account" aria-label="Your U Drive account">
           <Link onClick={onClose} href="/sign-in" className="action primary">
             <UserRound size={16} />
@@ -99,6 +184,15 @@ export function Navbar() {
   const [mobile, setMobile] = useState(false)
   const [rental, setRental] = useState(false)
   const menuTrigger = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    if (!mobile) return
+    const desktop = window.matchMedia('(min-width: 1131px)')
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobile(false)
+    }
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => desktop.removeEventListener('change', closeOnDesktop)
+  }, [mobile])
   const closeMobile = () => {
     setMobile(false)
     requestAnimationFrame(() => menuTrigger.current?.focus())

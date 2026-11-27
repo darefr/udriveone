@@ -247,6 +247,7 @@
   align-items: start;
 }
 .fact-list {
+  padding-inline-end: var(--support-clearance);
   display: flex;
   flex-direction: column;
 }
@@ -625,6 +626,12 @@
   }
   .related-grid .vehicle-modes {
     font-size: 11px;
+  }
+  .related-grid .vehicle-actions {
+    flex-wrap: wrap;
+  }
+  .related-grid .small-book {
+    white-space: nowrap;
   }
   .detail-facts {
     column-gap: 6%;

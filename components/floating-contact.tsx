@@ -1,187 +1,125 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ArrowRight, ChevronDown, Sparkles, X } from 'lucide-react'
-import { fleet, money, whatsAppContact } from '@/lib/rental-data'
+import { ChevronDown, Sparkles } from 'lucide-react'
+import { whatsAppContact } from '@/lib/rental-data'
+import { useRentalChat } from '@/lib/use-rental-chat'
 import {
   Popover,
   PopoverContent,
-  PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
 } from './ui/popover'
 
+const ChatPanel = dynamic(
+  () => import('./rental-chat').then((mod) => mod.RentalChatPanel),
+  {
+    loading: () => (
+      <div className="assistant-loading" role="status">
+        <PopoverTitle>U Drive Rental AI Assistant</PopoverTitle>
+        <p>Opening the rental guide…</p>
+      </div>
+    ),
+  },
+)
+
 export function FloatingContact() {
   const pathname = usePathname()
-  const [greeting, setGreeting] = useState(true)
   const [open, setOpen] = useState(false)
   const dock = useRef<HTMLElement>(null)
+  const chat = useRentalChat()
   useEffect(() => {
     setOpen(false)
   }, [pathname])
   useEffect(() => {
     const el = dock.current
     if (!el) return
-    const search =
-      pathname === '/' ? document.querySelector('.hero-search') : null
+    if (open) {
+      el.style.removeProperty('--dock-clearance')
+      return
+    }
     let frame = 0
     const place = () => {
       frame = 0
-      const rect = search?.getBoundingClientRect()
-      const height = window.innerHeight
-      const lift =
-        rect &&
-        window.innerWidth <= 640 &&
-        rect.top > 155 &&
-        rect.top < height &&
-        rect.bottom > height - el.offsetHeight - 26
-      el.style.setProperty(
-        '--support-lift',
-        lift && rect ? `${Math.round(height - rect.top + 8)}px` : '0px',
+      const { left, right, height } = el.getBoundingClientRect()
+      const viewport = window.innerHeight
+      const safeBottom = 16
+      // Keep the dock viewport-fixed. Only change parking slots when it would mask a control.
+      const obstacles = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          'main input, main select, main textarea, main button:not(:disabled), main .action, main .small-book, main .image-open, main .round-arrow, main .showcase-controls, main .text-link, footer a',
+        ),
       )
+        .map((node) => node.getBoundingClientRect())
+        .filter(
+          (r) =>
+            r.height &&
+            r.right >= left - 3 &&
+            r.left <= right + 3 &&
+            r.bottom > 74 &&
+            r.top < viewport,
+        )
+      let bottom = safeBottom
+      while (
+        bottom + height < viewport - 80 &&
+        obstacles.some(
+          (r) =>
+            r.bottom + 5 > viewport - bottom - height &&
+            r.top - 5 < viewport - bottom,
+        )
+      )
+        bottom += height + 12
+      if (bottom + height >= viewport - 80) bottom = safeBottom
+      el.style.setProperty('--dock-clearance', `${bottom}px`)
     }
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(place)
     }
-    const quietOnInteraction = (event: Event) => {
-      if (!(event.target instanceof Node) || !el.contains(event.target))
-        setGreeting(false)
-    }
     place()
-    const observer = search ? new ResizeObserver(schedule) : null
-    if (search) observer?.observe(search)
+    const main = document.querySelector('main')
+    const observer = new ResizeObserver(schedule)
+    if (main) observer.observe(main)
     window.addEventListener('resize', schedule)
     window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('scroll', quietOnInteraction, {
-      passive: true,
-      once: true,
-    })
-    document.addEventListener('focusin', quietOnInteraction, { once: true })
+    document.addEventListener('focusin', schedule)
     return () => {
-      observer?.disconnect()
+      observer.disconnect()
       cancelAnimationFrame(frame)
       window.removeEventListener('resize', schedule)
       window.removeEventListener('scroll', schedule)
-      window.removeEventListener('scroll', quietOnInteraction)
-      document.removeEventListener('focusin', quietOnInteraction)
+      document.removeEventListener('focusin', schedule)
     }
-  }, [pathname])
-  const toggle = (value: boolean) => {
-    setOpen(value)
-    setGreeting(false)
-  }
-
+  }, [pathname, open])
   return (
     <aside
       ref={dock}
       className="support-dock"
+      data-ready={chat.restored}
       aria-label="U Drive rental support"
     >
-      <div className="assistant-anchor">
-        {greeting && (
-          <div className="assistant-greeting">
-            <button type="button" onClick={() => toggle(true)}>
-              Hi! How can I help you?
-            </button>
-            <button
-              type="button"
-              aria-label="Dismiss assistant greeting"
-              onClick={() => setGreeting(false)}
-            >
-              <X size={12} />
-            </button>
-          </div>
-        )}
-        <Popover open={open} onOpenChange={toggle}>
-          <PopoverTrigger
-            type="button"
-            className="support-button assistant-button"
-            aria-label={
-              open ? 'Minimize U Drive assistant' : 'Open U Drive AI assistant'
-            }
-            title="U Drive assistant"
-          >
-            {open ? <ChevronDown size={21} /> : <Sparkles size={21} />}
-          </PopoverTrigger>
-          <PopoverContent
-            align="end"
-            side="top"
-            sideOffset={10}
-            className="assistant-panel"
-            aria-label="U Drive rental assistant"
-          >
-            <PopoverHeader className="assistant-heading">
-              <span className="assistant-heading-icon">
-                <Sparkles size={17} />
-              </span>
-              <div>
-                <PopoverTitle>U Drive assistant</PopoverTitle>
-                <p>Rental help</p>
-              </div>
-              <button
-                type="button"
-                className="assistant-minimize"
-                aria-label="Minimize assistant"
-                onClick={() => toggle(false)}
-              >
-                <X size={16} />
-              </button>
-            </PopoverHeader>
-            <div className="assistant-guide">
-              <p>What would you like to know?</p>
-              <details name="rental-help">
-                <summary>
-                  Fleet and daily rates <ChevronDown size={15} />
-                </summary>
-                <dl>
-                  {fleet.map((v) => (
-                    <div key={v.slug}>
-                      <dt>
-                        <Link href={`/fleet/${v.slug}`}>{v.name}</Link>
-                      </dt>
-                      <dd>{money(v.dailyRate)} / day</dd>
-                    </div>
-                  ))}
-                </dl>
-                <Link className="text-link" href="/fleet">
-                  Compare the cars <ArrowRight size={13} />
-                </Link>
-              </details>
-              <details name="rental-help">
-                <summary>
-                  Self drive or with a driver? <ChevronDown size={15} />
-                </summary>
-                <p>
-                  Take the wheel with Self Drive, or request a chauffeur with
-                  With Driver. The team confirms driver charges separately from
-                  the listed car rate.
-                </p>
-                <Link className="text-link" href="/rental-options">
-                  Compare rental options <ArrowRight size={13} />
-                </Link>
-              </details>
-              <details name="rental-help">
-                <summary>
-                  Pickup and delivery <ChevronDown size={15} />
-                </summary>
-                <p>
-                  Start in Kathmandu or request delivery elsewhere in Nepal. The
-                  team confirms access, timing, and any delivery charge for your
-                  route.
-                </p>
-                <Link className="text-link" href="/booking">
-                  Plan your rental <ArrowRight size={13} />
-                </Link>
-              </details>
-              <p className="assistant-disclosure">
-                Rental guide mode. Live AI chat is not connected.
-              </p>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </div>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger
+          type="button"
+          className="support-button assistant-button"
+          aria-label={
+            open ? 'Minimize U Drive assistant' : 'Open U Drive AI assistant'
+          }
+          title="U Drive Rental Assistant"
+        >
+          {open ? <ChevronDown size={22} /> : <Sparkles size={22} />}
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          side="top"
+          sideOffset={10}
+          className="assistant-panel rental-chat-panel"
+          aria-label="U Drive Rental Assistant"
+        >
+          <ChatPanel chat={chat} onClose={() => setOpen(false)} />
+        </PopoverContent>
+      </Popover>
       <a
         className="support-button whatsapp-button"
         href={whatsAppContact.href}
@@ -190,7 +128,7 @@ export function FloatingContact() {
         aria-label={whatsAppContact.label}
         title={whatsAppContact.label}
       >
-        <img src="/images/whatsapp.svg" alt="" width={25} height={25} />
+        <img src="/images/whatsapp.svg" alt="" width={26} height={26} />
       </a>
     </aside>
   )

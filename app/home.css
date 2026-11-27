@@ -386,6 +386,90 @@
 .experience-tile:hover > img {
   transform: scale(1.035);
 }
+.vehicle-category {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: var(--foreground);
+  background: var(--background);
+  font-size: 11px;
+  font-weight: 750;
+}
+.vehicle-spec-line {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.vehicle-spec-line span {
+  margin-inline: 3px;
+}
+.fleet-filters {
+  margin-top: 20px;
+}
+.fleet-empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding-inline: 24px;
+}
+.fleet-empty > svg {
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+}
+.fleet-more {
+  margin-top: 18px;
+}
+.review-rail {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.review-rail::-webkit-scrollbar {
+  display: none;
+}
+.review-rail .review-card {
+  flex: 0 0 calc((100% - 32px) / 3);
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  animation: none;
+}
+.review-rail .review-author {
+  margin-top: auto;
+}
+.review-rail blockquote {
+  font-size: 16px;
+}
+.review-rail .review-avatar {
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--primary-dark);
+  background: var(--soft-accent);
+}
+@media (min-width: 1000px) {
+  .carousel-controls.review-rail-controls {
+    display: none;
+  }
+}
+@media (max-width: 999px) {
+  .review-rail .review-card {
+    flex-basis: 57%;
+  }
+}
+@media (max-width: 640px) {
+  .review-rail .review-card {
+    flex-basis: 88%;
+  }
+  .review-heading {
+    flex-wrap: wrap;
+  }
+}
 .image-open {
   position: absolute;
   top: 11px;

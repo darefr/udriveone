@@ -24,6 +24,7 @@ export function StructuredData({ vehicle }: { vehicle?: Vehicle }) {
         '@context': 'https://schema.org',
         '@type': 'AutoRental',
         name: business.name,
+        telephone: business.whatsappNumber,
         description: business.description,
         address: {
           '@type': 'PostalAddress',

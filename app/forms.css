@@ -5,6 +5,178 @@
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.85fr);
   gap: clamp(30px, 6vw, 100px);
 }
+.rental-planner {
+  min-width: 0;
+}
+.planner-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 750;
+}
+.planner-progress small,
+.planner-required {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  font-weight: 500;
+}
+.planner-progress-bar {
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  border: 0;
+  background: var(--surface);
+  color: var(--primary);
+  display: block;
+  margin-block: 10px;
+}
+.planner-progress-bar::-webkit-progress-bar {
+  background: var(--surface);
+}
+.planner-progress-bar::-webkit-progress-value {
+  background: var(--primary);
+}
+.planner-progress-bar::-moz-progress-bar {
+  background: var(--primary);
+}
+.planner-required {
+  margin-bottom: 15px;
+}
+.required-mark,
+.planner-required > span {
+  color: var(--primary-dark);
+}
+.planner-step {
+  border-bottom: 1px solid var(--border);
+}
+.planner-step h2 {
+  font-size: 17px;
+  letter-spacing: -0.025em;
+}
+.planner-step h2 > button {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  gap: 12px;
+  padding-block: 15px;
+  scroll-margin-top: 82px;
+}
+.planner-step h2 > button:disabled {
+  color: var(--muted-foreground);
+  cursor: default;
+}
+.planner-step h2 small {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  margin-top: 3px;
+}
+.planner-step h2 > button > svg {
+  margin-left: auto;
+  color: var(--muted-foreground);
+}
+.planner-number {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.planner-step[data-current='true'] .planner-number {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: var(--background);
+}
+.planner-step[data-complete='true'] .planner-number {
+  background: var(--soft-accent);
+  color: var(--primary-dark);
+}
+.planner-step-body {
+  padding: 2px 0 20px 41px;
+}
+.planner-step-body :is(input, select, button, textarea) {
+  scroll-margin-top: 90px;
+}
+.planner-car {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--surface);
+  border-radius: 6px;
+}
+.planner-car img {
+  width: 84px;
+  height: 58px;
+  object-fit: cover;
+  object-position: center 65%;
+  border-radius: 4px;
+}
+.planner-car p,
+.step-help,
+.return-check,
+.rental-handoff > p {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.planner-car p {
+  font-size: 12px;
+}
+.planner-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+.planner-actions > .primary {
+  margin-left: auto;
+}
+.mode-group .step-help {
+  margin-top: 8px;
+}
+.field-error {
+  color: var(--primary-dark);
+  font-size: 13px;
+}
+.form-field[data-invalid='true'] :is(input, button, select) {
+  border-color: var(--primary-dark);
+}
+.rental-handoff > h3 {
+  font-size: 21px;
+  margin-bottom: 8px;
+}
+.rental-handoff .action {
+  margin-top: 15px;
+}
+.rental-handoff .action img {
+  filter: brightness(0) invert(1);
+}
+.rental-handoff .handoff-number {
+  margin-top: 6px;
+  font-size: 12px;
+}
+@media (max-width: 730px) {
+  .planner-step-body {
+    padding-left: 0;
+  }
+  .planner-actions {
+    justify-content: flex-start;
+  }
+  .planner-actions > .primary {
+    margin-left: 0;
+  }
+}
 .form-section-heading {
   display: flex;
   align-items: center;
@@ -182,6 +354,9 @@
 }
 .summary-content {
   padding: 23px;
+}
+.booking-summary .summary-content {
+  padding-inline-end: max(23px, var(--support-clearance));
 }
 .summary-content h2 {
   font-size: 28px;

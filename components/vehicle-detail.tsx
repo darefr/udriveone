@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, ArrowUpRight, Check, MapPin } from 'lucide-react'
-import { faqs, fleet, money, type Vehicle } from '@/lib/rental-data'
+import { faqs, fleet, modeLabel, money, type Vehicle } from '@/lib/rental-data'
 import { tripHref, type Trip } from '@/lib/trip'
 import { Breadcrumbs, FAQ, SectionHeading } from './shared'
 import { VehicleGallery } from './vehicle-gallery'
@@ -38,25 +38,26 @@ export function VehicleDetail({
             </div>
             <p className="product-overview">{vehicle.overview}</p>
             <div className="check-list">
-              <span>
-                <Check />
-                Self Drive or With Driver
-              </span>
-              <span>
-                <Check />
-                Kathmandu pickup or requested delivery
-              </span>
-              <span>
-                <Check />
-                Nepal-wide service
-              </span>
+              {vehicle.features.map((feature) => (
+                <span key={feature}>
+                  <Check />
+                  {feature}
+                </span>
+              ))}
             </div>
             <div className="product-buttons">
               <Link
-                href={tripHref('/booking', { ...trip, vehicle: vehicle.slug })}
+                href={
+                  vehicle.availability === 'Unavailable'
+                    ? `/contact?vehicle=${vehicle.slug}`
+                    : tripHref('/booking', { ...trip, vehicle: vehicle.slug })
+                }
                 className="action primary"
               >
-                Rent This Car <ArrowRight size={17} />
+                {vehicle.availability === 'Unavailable'
+                  ? 'Check alternatives'
+                  : 'Rent This Car'}{' '}
+                <ArrowRight size={17} />
               </Link>
               <Link
                 className="text-link"
@@ -85,9 +86,18 @@ export function VehicleDetail({
             {[
               ['Vehicle', vehicle.name],
               ['Daily vehicle rate', money(vehicle.dailyRate)],
-              ['Rental options', 'Self Drive · With Driver'],
+              ['Body style', vehicle.bodyType],
+              ['Seats', String(vehicle.seats)],
+              ['Transmission', vehicle.transmission],
+              ['Powertrain', vehicle.fuel],
+              ['Rental options', vehicle.modes.map(modeLabel).join(' · ')],
+              [
+                'Availability',
+                vehicle.availability === 'Unavailable'
+                  ? 'Currently unavailable'
+                  : 'Confirm for your dates',
+              ],
               ['Service area', 'Kathmandu and across Nepal'],
-              ...vehicle.specifications.map((s) => [s.label, s.value]),
             ].map(([label, value]) => (
               <div key={label}>
                 <dt>{label}</dt>
@@ -121,6 +131,7 @@ export function VehicleDetail({
           <div className="fleet-grid related-grid">
             {fleet
               .filter((v) => v.slug !== vehicle.slug)
+              .slice(0, 3)
               .map((v) => (
                 <VehicleCard
                   key={v.slug}

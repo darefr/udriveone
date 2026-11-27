@@ -15,6 +15,12 @@ export default async function BookingPage({
 }) {
   const query = await searchParams
   const initial = readTrip(query)
+  const duration =
+    typeof query.duration === 'string' ? Number(query.duration) : 0
+  const plannedDays =
+    Number.isInteger(duration) && duration >= 1 && duration <= 365
+      ? duration
+      : undefined
   const destination = destinations.find(
     (d) => d.slug === query.destination,
   )?.name
@@ -27,8 +33,9 @@ export default async function BookingPage({
         description="Choose your car and dates, check the estimate, then review your rental request. No account needed."
       />
       <BookingForm
-        key={JSON.stringify([initial, destination])}
+        key={JSON.stringify([initial, destination, plannedDays])}
         initial={initial}
+        plannedDays={plannedDays}
         destination={destination}
       />
     </>

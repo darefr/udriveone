@@ -1,8 +1,22 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, ArrowUpRight, Check, MapPin } from 'lucide-react'
-import { destinations, fleet, journeySteps } from '@/lib/rental-data'
-import { SectionHeading } from './shared'
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  MapPin,
+  MessagesSquare,
+  ReceiptText,
+  Route,
+} from 'lucide-react'
+import {
+  destinations,
+  faqs,
+  featuredVehicles,
+  journeySteps,
+  whatsAppContact,
+} from '@/lib/rental-data'
+import { FAQ, SectionHeading } from './shared'
 import { VehicleCard } from './vehicle-card'
 import { DestinationCard } from './destination-card'
 import { Stats } from './stats'
@@ -21,12 +35,12 @@ export function FeaturedFleet() {
           className="fleet-grid home-fleet"
           aria-label="Featured rental vehicles"
         >
-          {fleet.map((v) => (
+          {featuredVehicles.slice(0, 4).map((v) => (
             <VehicleCard key={v.slug} vehicle={v} />
           ))}
         </div>
         <p className="swipe-hint">
-          Swipe to explore all four vehicles <ArrowRight size={13} />
+          Swipe to compare the featured cars <ArrowRight size={13} />
         </p>
       </div>
     </section>
@@ -107,6 +121,64 @@ export function RentalExperiences() {
     </section>
   )
 }
+export function RentalPrinciples() {
+  return (
+    <section className="section surface rental-principles">
+      <div className="wrap">
+        <SectionHeading
+          eyebrow="WHY CHOOSE U DRIVE"
+          title="Know the details before you drive."
+        />
+        <div className="principles">
+          {[
+            {
+              Icon: ReceiptText,
+              title: 'A price you can plan around',
+              text: 'Start with a published daily rate. See the vehicle total for your dates, then agree driver and delivery charges before you confirm.',
+            },
+            {
+              Icon: Route,
+              title: 'A handover that fits',
+              text: 'Collect in Kathmandu or request delivery to your hotel. A different return city? Add it to the same enquiry.',
+            },
+            {
+              Icon: MessagesSquare,
+              title: 'One local rental desk',
+              text: 'Speak to the Kathmandu team about the exact car, luggage space, and road conditions for your route.',
+            },
+          ].map(({ Icon, title, text }) => (
+            <div key={title}>
+              <Icon aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export function HomeFAQ() {
+  return (
+    <section className="section" aria-labelledby="home-faq-title">
+      <div className="wrap detail-facts home-faq">
+        <div>
+          <p className="eyebrow">AT THE RENTAL DESK</p>
+          <h2 id="home-faq-title">Before you take the keys.</h2>
+          <p className="section-description">
+            A few things worth knowing before you plan your drive.
+          </p>
+          <Link className="text-link" href="/faq">
+            All rental questions <ArrowRight size={15} />
+          </Link>
+        </div>
+        <FAQ items={[faqs[0], faqs[2], faqs[5], faqs[3]]} />
+      </div>
+    </section>
+  )
+}
+
 export function HowItWorks() {
   return (
     <section className="section timeline-section">
@@ -161,8 +233,10 @@ export function StorySection({ full = false }: { full?: boolean }) {
             journey—not the other way around.
           </p>
           <p>
-            Start in Kathmandu, choose your car, and plan the pickup or delivery
-            that works for you.
+            Collect your car in the valley or request a handover in Pokhara,
+            Chitwan, Nagarkot, or another location in Nepal. Tell us where you
+            want to finish, too. We confirm the route and delivery cost with you
+            before the keys change hands.
           </p>
           {full ? (
             <div className="check-list">
@@ -179,9 +253,14 @@ export function StorySection({ full = false }: { full?: boolean }) {
               </span>
             </div>
           ) : (
-            <Link className="text-link" href="/about">
-              The U Drive story <ArrowRight size={16} />
-            </Link>
+            <a
+              className="text-link"
+              href={whatsAppContact.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Discuss your handover <ArrowUpRight size={16} />
+            </a>
           )}
           <Stats />
         </div>

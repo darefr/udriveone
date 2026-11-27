@@ -31,7 +31,13 @@ export function CTA() {
 export { FloatingContact } from './floating-contact'
 
 const groups = [
-  { title: 'Fleet', links: fleet.map((v) => [v.name, `/fleet/${v.slug}`]) },
+  {
+    title: 'Fleet',
+    links: [
+      ...fleet.slice(0, 4).map((v) => [v.name, `/fleet/${v.slug}`]),
+      ['View full fleet', '/fleet'],
+    ],
+  },
   {
     title: 'Rental Services',
     links: [
@@ -42,12 +48,11 @@ const groups = [
     ],
   },
   {
-    title: 'Explore',
-    links: ['kathmandu', 'pokhara', 'chitwan', 'nagarkot'].flatMap((slug) =>
-      destinations
-        .filter((d) => d.slug === slug)
-        .map((d) => [d.name, `/destinations/${d.slug}`]),
-    ),
+    title: 'Explore Nepal',
+    links: [
+      ...destinations.map((d) => [d.name, `/destinations/${d.slug}`]),
+      ['Other destinations', '/booking?pickup=Other+location+in+Nepal'],
+    ],
   },
   {
     title: 'Company',
@@ -78,6 +83,16 @@ export function Footer() {
           <div className="footer-brand">
             <Brand />
             <p>{business.description}</p>
+            <a
+              className="footer-whatsapp"
+              href={whatsAppContact.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/images/whatsapp.svg" alt="" width={16} height={16} />
+              {business.whatsappNumber}
+              <ArrowUpRight size={13} />
+            </a>
             <span className="inline-icon">
               <MapPin size={15} />
               Kathmandu, Nepal

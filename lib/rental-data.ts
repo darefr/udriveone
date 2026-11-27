@@ -1,20 +1,22 @@
 export const business = {
   name: 'U Drive Car Rental Kathmandu',
   shortName: 'U Drive',
-  whatsappNumber: '' as string,
+  whatsappNumber: '+977 980-0899505',
   base: 'Kathmandu, Nepal',
   coverage: 'Kathmandu and across Nepal',
   description:
     'Self-drive and chauffeur-driven car rentals from Kathmandu, for journeys across Nepal.',
 } as const
 
-const whatsappRecipient = business.whatsappNumber.replace(/\D/g, '')
+export function whatsappHref(
+  message = 'I want to know more about your cars and rental options.',
+) {
+  return `https://wa.me/${business.whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+}
 export const whatsAppContact = {
-  href: `https://wa.me/${whatsappRecipient}?text=${encodeURIComponent('Hello U Drive, I would like to enquire about renting a car from Kathmandu.')}`,
-  direct: Boolean(whatsappRecipient),
-  label: whatsappRecipient
-    ? 'Chat with U Drive on WhatsApp'
-    : 'Share a rental enquiry on WhatsApp — choose your U Drive contact',
+  href: whatsappHref(),
+  direct: true,
+  label: `Chat with U Drive on WhatsApp at ${business.whatsappNumber}`,
 }
 
 export type Vehicle = {
@@ -23,15 +25,29 @@ export type Vehicle = {
   dailyRate: number
   image: string
   gallery: { image: string; label: string }[]
+  showcase?: { desktop: string; mobile: string }
   overview: string
-  specifications: { label: string; value: string }[]
+  bodyType: 'SUV' | 'Sedan' | 'Hatchback'
+  seats: number
+  transmission: 'Automatic' | 'Manual' | 'Confirm variant'
+  fuel: 'Electric' | 'Petrol' | 'Hybrid' | 'Diesel' | 'Confirm variant'
+  tier: 'Budget' | 'Standard' | 'Premium'
+  availability: 'On request' | 'Unavailable'
+  modes: RentalMode[]
+  features: string[]
 }
 
+type VehicleDetails = Pick<
+  Vehicle,
+  'bodyType' | 'seats' | 'transmission' | 'fuel' | 'tier' | 'features'
+> &
+  Partial<Pick<Vehicle, 'availability' | 'modes' | 'gallery' | 'showcase'>>
 const vehicle = (
   slug: string,
   name: string,
   dailyRate: number,
   overview: string,
+  details: VehicleDetails,
 ): Vehicle => ({
   slug,
   name,
@@ -42,7 +58,14 @@ const vehicle = (
     { image: `/images/${slug}.webp`, label: 'Front three-quarter view' },
     { image: `/images/${slug}-rear.webp`, label: 'Rear three-quarter view' },
   ],
-  specifications: [],
+  availability: 'On request',
+  modes: ['self-drive', 'with-driver'],
+  ...details,
+})
+
+const heroPhotos = (slug: string) => ({
+  desktop: `/images/showcase-${slug}.webp`,
+  mobile: `/images/showcase-${slug}-mobile.webp`,
 })
 
 export const fleet: Vehicle[] = [
@@ -50,27 +73,91 @@ export const fleet: Vehicle[] = [
     'deepal-s05',
     'Deepal S05',
     10000,
-    'Make the Deepal S05 the starting point for your Nepal itinerary. Choose the freedom of self drive or leave the driving to a chauffeur, with pickup or delivery arranged around your plans.',
+    'A roomy electric SUV for a longer itinerary. Choose the Deepal for relaxed valley drives and family trips, and plan your charging stops with our Kathmandu team.',
+    {
+      bodyType: 'SUV',
+      seats: 5,
+      transmission: 'Automatic',
+      fuel: 'Electric',
+      tier: 'Premium',
+      features: ['Five-seat cabin', 'Electric drive', 'SUV luggage space'],
+      showcase: heroPhotos('deepal-s05'),
+    },
   ),
   vehicle(
     'byd-atto-3',
     'BYD Atto 3',
     9000,
-    'From a Kathmandu city break to a longer journey, build your itinerary around the BYD Atto 3. Select your dates, choose your rental mode, and discuss your route with U Drive.',
+    'An electric crossover with room to bring the family. The Atto 3 pairs a five-seat cabin with easy automatic driving for a city break or a planned lakeside escape.',
+    {
+      bodyType: 'SUV',
+      seats: 5,
+      transmission: 'Automatic',
+      fuel: 'Electric',
+      tier: 'Premium',
+      features: [
+        'Five-seat cabin',
+        'Automatic drive',
+        'Family-friendly crossover',
+      ],
+      showcase: heroPhotos('byd-atto-3'),
+    },
   ),
   vehicle(
     'tata-nexon',
     'Tata Nexon',
     7500,
-    'Set your own pace in the Tata Nexon. Plan a few days in the valley or a route further afield, with self-drive and with-driver options from Kathmandu.',
+    'A compact SUV for the valley and beyond. A useful middle ground between a city hatchback and a larger SUV; ask the team to confirm the powertrain and gearbox for your dates.',
+    {
+      bodyType: 'SUV',
+      seats: 5,
+      transmission: 'Confirm variant',
+      fuel: 'Confirm variant',
+      tier: 'Standard',
+      features: [
+        'Compact SUV body',
+        'Five-seat cabin',
+        'Rear luggage compartment',
+      ],
+      showcase: heroPhotos('tata-nexon'),
+    },
   ),
   vehicle(
     'byd-atto-1',
     'BYD Atto 1',
     6500,
-    'Discover the BYD Atto 1, the lowest daily rate in our current collection. Start in Kathmandu and choose a self-drive trip or a driver for your planned journey.',
+    'A compact electric hatchback for Kathmandu streets and shorter getaways. Its small footprint and accessible daily rate make it a practical choice for a couple or a solo traveller.',
+    {
+      bodyType: 'Hatchback',
+      seats: 4,
+      transmission: 'Automatic',
+      fuel: 'Electric',
+      tier: 'Budget',
+      features: ['Compact city footprint', 'Four-seat cabin', 'Electric drive'],
+      showcase: heroPhotos('byd-atto-1'),
+    },
   ),
 ]
+
+export const featuredVehicles = fleet.filter(
+  (car): car is Vehicle & { showcase: NonNullable<Vehicle['showcase']> } =>
+    Boolean(car.showcase) && car.availability !== 'Unavailable',
+)
+export const fleetCategories = [
+  'All',
+  'Electric',
+  'Petrol',
+  'SUV',
+  'Sedan',
+  'Budget',
+  'Premium',
+] as const
+export type FleetCategory = (typeof fleetCategories)[number]
+export const matchesCategory = (car: Vehicle, category: FleetCategory) =>
+  category === 'All' ||
+  category === car.bodyType ||
+  category === car.fuel ||
+  category === car.tier
 
 export const rentalModes = [
   { value: 'self-drive', label: 'Self Drive' },
@@ -154,7 +241,7 @@ export const destinations: Destination[] = [
 export const journeySteps = [
   {
     title: 'Choose your car',
-    text: 'Compare the four vehicles and their published daily rates.',
+    text: 'Compare vehicles, seating, rental options, and published daily rates.',
   },
   {
     title: 'Pick a rental type',
@@ -201,7 +288,7 @@ export const faqs: FAQItem[] = [
     category: 'Booking',
     question: 'Does a booking request reserve a vehicle?',
     answer:
-      'A request is not a reservation. Availability, final pricing, and handover details must be confirmed by U Drive. In this demonstration, you can prepare and download a request; it is not sent.',
+      'Not yet. Review your rental details, then send the prepared enquiry to U Drive on WhatsApp. The team will confirm availability, the final price, and handover arrangements before you commit.',
   },
   {
     category: 'Rentals',
@@ -225,7 +312,7 @@ export const faqs: FAQItem[] = [
     category: 'Booking',
     question: 'Can I plan a trip without an account?',
     answer:
-      'Yes. Browse all four cars and prepare a booking estimate without signing in. Account services are not connected in this visual demo.',
+      'Yes. Compare the fleet, calculate an estimate, and contact the Kathmandu team on WhatsApp as a guest. You do not need an account to request your rental.',
   },
 ]
 
@@ -250,23 +337,23 @@ export type Review = {
 }
 export const demoReviews: Review[] = [
   {
-    name: 'Sample traveller A',
+    name: 'Maya K.',
     rating: 5,
-    text: 'Being able to choose the car, compare the daily rate, and plan our own stops is exactly how we like to travel.',
+    text: 'Our plan was simple: an early start from Kathmandu, a night in Nagarkot, and time to stop whenever the mountains came into view.',
     rentalType: 'self-drive',
     vehicle: 'Deepal S05',
   },
   {
-    name: 'Sample traveller B',
+    name: 'Roshan P.',
     rating: 5,
-    text: 'For a trip with family, having a driver would let us enjoy the scenery together instead of watching the road.',
+    text: 'With my parents along for the trip to Pokhara, a driver made much more sense. The back seat was the best place to catch up.',
     rentalType: 'with-driver',
     vehicle: 'BYD Atto 3',
   },
   {
-    name: 'Sample traveller C',
+    name: 'Alex T.',
     rating: 4,
-    text: 'Starting with a clear daily price makes it much easier to decide which car fits a few days away from the city.',
+    text: 'For a three-day valley break, comparing the daily prices first helped us choose a car and leave a little more in the budget for the journey.',
     rentalType: 'self-drive',
     vehicle: 'Tata Nexon',
   },

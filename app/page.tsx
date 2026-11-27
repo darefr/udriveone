@@ -6,6 +6,8 @@ import {
   RentalExperiences,
   HowItWorks,
   StorySection,
+  HomeFAQ,
+  RentalPrinciples,
 } from '@/components/home-sections'
 import { ReviewCarousel } from '@/components/review-carousel'
 import { CTA } from '@/components/footer'
@@ -17,11 +19,13 @@ export default function Home() {
       <Hero />
       <ValueStrip />
       <FeaturedFleet />
+      <RentalPrinciples />
       <RentalExperiences />
-      <ExploreNepal />
       <HowItWorks />
+      <ExploreNepal />
       <StorySection />
       <ReviewCarousel />
+      <HomeFAQ />
       <CTA />
     </>
   )
